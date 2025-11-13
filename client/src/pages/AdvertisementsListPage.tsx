@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
-import type { IAdvertisement } from "../entities/Advertisement/types/Advertisement";
+import { useEffect } from "react";
+
 import { AdvertisementListItem } from "../entities/Advertisement/UI/AdvertisementListItem/AdvertisementListItem";
+import { useAdvertisementStore } from "../entities/Advertisement/model/AdvertisementStore";
 
 export const AdvertisementsListPage = () => {
-  const [advertisements, setAdvertisements] = useState<IAdvertisement[]>([]);
+  const { advertisements, fetchAdvertisements } = useAdvertisementStore();
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/v1/ads")
-      .then((response) => response.json())
-      .then((data) => setAdvertisements(data.ads));
+    fetchAdvertisements();
   }, []);
 
   return (
