@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-
+import { Pagination } from "antd";
 import { AdvertisementListItem } from "../entities/Advertisement/UI/AdvertisementListItem/AdvertisementListItem";
 import { useAdvertisementStore } from "../entities/Advertisement/model/AdvertisementStore";
 
 export const AdvertisementsListPage = () => {
-  const { advertisements, fetchAdvertisements } = useAdvertisementStore();
+  const { advertisements, fetchAdvertisements, currentPage, totalItems, limit, goToPage } = useAdvertisementStore();
 
   useEffect(() => {
     fetchAdvertisements();
@@ -22,6 +22,7 @@ export const AdvertisementsListPage = () => {
           createdAt={advertisement.createdAt}
         />
       ))}
+      <Pagination current={currentPage} total={totalItems} pageSize={limit} showSizeChanger={false} onChange={(newPage) => goToPage(newPage)} />
     </>
   );
 };
