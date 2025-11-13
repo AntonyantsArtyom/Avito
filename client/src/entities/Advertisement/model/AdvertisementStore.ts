@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { IAdvertisement } from "../types/Advertisement";
+import axios from "axios";
 
 interface IAdvertisementStore {
   limit: number;
@@ -22,6 +23,10 @@ interface IAdvertisementStore {
   setFilters: (filters: Partial<IAdvertisementStore["filters"]>) => void;
   clearFilters: () => void;
   applyFilters: () => void;
+
+  approveAdvertisement: (id: number) => Promise<void>;
+  rejectAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;
+  requestChangesAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;
 }
 
 export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => ({
@@ -103,5 +108,38 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
   applyFilters: () => {
     const state = get();
     state.fetchAdvertisements(1);
+  },
+
+  approveAdvertisement: async (id: number) => {
+    const response = await fetch(`http://localhost:3001/api/v1/ads/${id}/approve`, {
+      method: "POST",
+    });
+
+    const data = await response.json();
+
+    set((state) => ({
+      advertisements: state.advertisements.map((ad) => (ad.id === id ? data.ad : ad)),
+    }));
+  },
+
+  rejectAdvertisement: async (id: number, reason: string, comment: string = "") => {
+    const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/reject`, { reason, comment });
+
+    set((state) => ({
+      advertisements: state.advertisements.map((ad) => (ad.id === id ? response.data.ad : ad)),
+    }));
+  },
+
+  requestChangesAdvertisement: async (id: number, reason: string, comment: string = "") => {
+    const response = await fetch(`http://localhost:3001/api/v1/ads/${id}/request-changes`, {
+      method: "POST",
+      body: JSON.stringify({ reason, comment }),
+    });
+
+    const data = await response.json();
+
+    set((state) => ({
+      advertisements: state.advertisements.map((ad) => (ad.id === id ? data.ad : ad)),
+    }));
   },
 }));
