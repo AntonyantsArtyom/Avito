@@ -9,7 +9,6 @@ import {
   StyledTextContainer,
   StyledTitle,
 } from "./AdvertisementListItem.styles";
-import Placeholder from "../../../../assets/Placeholder.svg";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,8 +21,9 @@ export const AdvertisementListItem = ({
   status,
   createdAt,
   priority,
+  images,
   id,
-}: Pick<IAdvertisement, "title" | "price" | "category" | "createdAt" | "id" | "status" | "priority">) => {
+}: Pick<IAdvertisement, "title" | "price" | "category" | "createdAt" | "id" | "status" | "priority" | "images">) => {
   const navigate = useNavigate();
 
   const handleClick = useCallback(() => {
@@ -36,7 +36,7 @@ export const AdvertisementListItem = ({
         {priority === "urgent" && <Tag color="error">{"Срочное"}</Tag>}
         <Tag>{status}</Tag>
       </StyledTagsContainer>
-      <StyledImage src={Placeholder} alt={title} />
+      <StyledImage src={images[0]} alt={title} />
       <StyledTextContainer>
         <StyledTitle>{title}</StyledTitle>
         <StyledPrice>{price}₽</StyledPrice>

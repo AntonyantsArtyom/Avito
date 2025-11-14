@@ -7,6 +7,7 @@ import { StyledButtonsArea, StyledContainer, StyledNavigation } from "./Advertis
 import { CheckOutlined, ReloadOutlined, CloseOutlined, ArrowLeftOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Button, Typography, Modal, Form, Select, Input, message } from "antd";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
+import { AdvertisementGallery } from "../../entities/Advertisement/UI/AdvertisementGallery/AdvertisementGallery";
 
 const { Option } = Select;
 
@@ -82,6 +83,7 @@ export const AdvertisementsItemPage = () => {
 
   return (
     <StyledContainer>
+      <AdvertisementGallery images={advertisement.images} />
       <AdvertisementModerationHistory moderationHistory={advertisement.moderationHistory} />
       <AdvertisementFullInfo characteristics={advertisement.characteristics} seller={advertisement.seller} />
       <StyledButtonsArea>

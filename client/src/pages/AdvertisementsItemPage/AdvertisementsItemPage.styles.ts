@@ -1,13 +1,15 @@
 import styled from "styled-components";
 
 export const StyledContainer = styled.div`
+  padding-top: 10px;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: max-content max-content max-content;
+  grid-template-columns: 348px 1fr;
+  grid-template-rows: 200px auto auto;
   gap: 10px;
 
   grid-template-areas:
-    "........    moderationHistory"
+    "gallery     moderationHistory"
     "fullInfo    fullInfo         "
     "buttonsArea buttonsArea      ";
 `;

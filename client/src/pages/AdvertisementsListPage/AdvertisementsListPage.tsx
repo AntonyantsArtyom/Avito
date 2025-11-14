@@ -27,6 +27,7 @@ export const AdvertisementsListPage = () => {
             createdAt={advertisement.createdAt}
             status={advertisement.status}
             priority={advertisement.priority}
+            images={advertisement.images}
           />
         ))}
 
