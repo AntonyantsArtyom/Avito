@@ -25,6 +25,8 @@ export const AdvertisementsListPage = () => {
             price={advertisement.price}
             category={advertisement.category}
             createdAt={advertisement.createdAt}
+            status={advertisement.status}
+            priority={advertisement.priority}
           />
         ))}
 

@@ -9,6 +9,7 @@ export const StyledCard = styled(Card)`
     .ant-card-body {
       display: grid;
       grid-template-columns: max-content 1fr;
+      padding-right: 5px;
       gap: 20px;
     }
   }
@@ -52,7 +53,6 @@ export const StyledTextContainer = styled.div`
     "category date  ..... button";
 
   width: 100%;
-  max-width: 650px;
   gap: 5px;
 `;
 
@@ -67,4 +67,20 @@ export const StyledButton = styled(Button)`
 export const StyledImage = styled.img`
   width: 120px;
   height: 120px;
+`;
+
+export const StyledTagsContainer = styled.div`
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  margin: 5px;
+
+  display: flex;
+  gap: 5px;
+
+  &&& {
+    .ant-tag {
+      margin-inline-end: 0;
+    }
+  }
 `;

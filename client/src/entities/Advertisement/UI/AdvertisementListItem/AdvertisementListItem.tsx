@@ -1,11 +1,29 @@
 import type { IAdvertisement } from "../../types/Advertisement";
-import { StyledButton, StyledCard, StyledCategoryAndDate, StyledImage, StyledPrice, StyledTextContainer, StyledTitle } from "./AdvertisementListItem.styles";
+import {
+  StyledButton,
+  StyledCard,
+  StyledCategoryAndDate,
+  StyledImage,
+  StyledPrice,
+  StyledTagsContainer,
+  StyledTextContainer,
+  StyledTitle,
+} from "./AdvertisementListItem.styles";
 import Placeholder from "../../../../assets/Placeholder.svg";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { Tag } from "antd";
 
-export const AdvertisementListItem = ({ title, price, category, createdAt, id }: Pick<IAdvertisement, "title" | "price" | "category" | "createdAt" | "id">) => {
+export const AdvertisementListItem = ({
+  title,
+  price,
+  category,
+  status,
+  createdAt,
+  priority,
+  id,
+}: Pick<IAdvertisement, "title" | "price" | "category" | "createdAt" | "id" | "status" | "priority">) => {
   const navigate = useNavigate();
 
   const handleClick = useCallback(() => {
@@ -14,6 +32,10 @@ export const AdvertisementListItem = ({ title, price, category, createdAt, id }:
 
   return (
     <StyledCard>
+      <StyledTagsContainer>
+        {priority === "urgent" && <Tag color="error">{"Срочное"}</Tag>}
+        <Tag>{status}</Tag>
+      </StyledTagsContainer>
       <StyledImage src={Placeholder} alt={title} />
       <StyledTextContainer>
         <StyledTitle>{title}</StyledTitle>
