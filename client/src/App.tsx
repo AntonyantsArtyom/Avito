@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { AdvertisementsListPage } from "./pages/AdvertisementsListPage";
+import { AdvertisementsListPage } from "./pages/AdvertisementsListPage/AdvertisementsListPage";
 import { AdvertisementsItemPage } from "./pages/AdvertisementsItemPage/AdvertisementsItemPage";
 import "./App.css";
 
