@@ -123,14 +123,10 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
   },
 
   approveAdvertisement: async (id: number) => {
-    const response = await fetch(`http://localhost:3001/api/v1/ads/${id}/approve`, {
-      method: "POST",
-    });
-
-    const data = await response.json();
+    const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/approve`);
 
     set((state) => ({
-      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? data.advertisements : advertisements)),
+      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.ad : advertisements)),
     }));
 
     if (get().advertisement?.id === id) {
@@ -142,7 +138,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/reject`, { reason, comment });
 
     set((state) => ({
-      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.advertisements : advertisements)),
+      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.ad : advertisements)),
     }));
 
     if (get().advertisement?.id === id) {
@@ -151,15 +147,10 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
   },
 
   requestChangesAdvertisement: async (id: number, reason: string, comment: string = "") => {
-    const response = await fetch(`http://localhost:3001/api/v1/ads/${id}/request-changes`, {
-      method: "POST",
-      body: JSON.stringify({ reason, comment }),
-    });
-
-    const data = await response.json();
+    const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/request-changes`, { reason, comment });
 
     set((state) => ({
-      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? data.ad : advertisements)),
+      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.ad : advertisements)),
     }));
 
     if (get().advertisement?.id === id) {
