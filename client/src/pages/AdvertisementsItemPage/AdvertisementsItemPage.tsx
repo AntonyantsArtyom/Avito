@@ -12,7 +12,7 @@ import { AdvertisementGallery } from "../../entities/Advertisement/UI/Advertisem
 const { Option } = Select;
 
 export const AdvertisementsItemPage = () => {
-  const [advertisement, setAdvertisement] = useState<IAdvertisement | null>(null);
+  const { advertisement, fetchAdvertisement } = useAdvertisementStore();
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [changesModalVisible, setChangesModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -25,22 +25,15 @@ export const AdvertisementsItemPage = () => {
     const id = url.pathname.split("/").pop();
 
     if (id) {
-      fetchAdvertisement(id);
+      fetchAdvertisement(+id);
     }
   }, []);
-
-  const fetchAdvertisement = async (id: string) => {
-    const response = await fetch(`http://localhost:3001/api/v1/ads/${id}`);
-    const data = await response.json();
-    setAdvertisement(data);
-  };
 
   const handleApprove = async () => {
     if (!advertisement) return;
 
     try {
       await approveAdvertisement(advertisement.id);
-      fetchAdvertisement(advertisement.id.toString());
       message.success("Объявление одобрено");
     } catch (error) {
       message.error("Ошибка при одобрении объявления");
@@ -52,7 +45,6 @@ export const AdvertisementsItemPage = () => {
 
     try {
       await rejectAdvertisement(advertisement.id, values.reason, values.comment);
-      fetchAdvertisement(advertisement.id.toString());
       setRejectModalVisible(false);
       form.resetFields();
       message.success("Объявление отклонено");
@@ -66,7 +58,6 @@ export const AdvertisementsItemPage = () => {
 
     try {
       await requestChangesAdvertisement(advertisement.id, values.reason, values.comment);
-      fetchAdvertisement(advertisement.id.toString());
       setChangesModalVisible(false);
       form.resetFields();
       message.success("Запрос изменений отправлен");

@@ -8,6 +8,7 @@ interface IAdvertisementStore {
   totalPages: number;
   totalItems: number;
   advertisements: IAdvertisement[];
+  advertisement: IAdvertisement | null;
 
   filters: {
     status: string[];
@@ -18,6 +19,7 @@ interface IAdvertisementStore {
   };
 
   fetchAdvertisements: (page?: number) => Promise<void>;
+  fetchAdvertisement: (id: number) => Promise<void>;
   goToPage: (page: number) => void;
 
   setFilters: (filters: Partial<IAdvertisementStore["filters"]>) => void;
@@ -31,6 +33,7 @@ interface IAdvertisementStore {
 
 export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => ({
   advertisements: [],
+  advertisement: null,
   limit: 15,
   currentPage: 1,
   totalPages: 1,
@@ -82,6 +85,12 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     });
   },
 
+  fetchAdvertisement: async (id: number) => {
+    const response = await fetch(`http://localhost:3001/api/v1/ads/${id}`);
+    const data = await response.json();
+    set({ advertisement: data });
+  },
+
   goToPage: (page) => {
     const state = get();
     state.fetchAdvertisements(page);
@@ -118,16 +127,24 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     const data = await response.json();
 
     set((state) => ({
-      advertisements: state.advertisements.map((ad) => (ad.id === id ? data.ad : ad)),
+      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? data.advertisements : advertisements)),
     }));
+
+    if (get().advertisement?.id === id) {
+      get().fetchAdvertisement(id);
+    }
   },
 
   rejectAdvertisement: async (id: number, reason: string, comment: string = "") => {
     const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/reject`, { reason, comment });
 
     set((state) => ({
-      advertisements: state.advertisements.map((ad) => (ad.id === id ? response.data.ad : ad)),
+      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.advertisements : advertisements)),
     }));
+
+    if (get().advertisement?.id === id) {
+      get().fetchAdvertisement(id);
+    }
   },
 
   requestChangesAdvertisement: async (id: number, reason: string, comment: string = "") => {
@@ -141,5 +158,9 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     set((state) => ({
       advertisements: state.advertisements.map((ad) => (ad.id === id ? data.ad : ad)),
     }));
+
+    if (get().advertisement?.id === id) {
+      get().fetchAdvertisement(id);
+    }
   },
 }));
