@@ -6,8 +6,7 @@ export const StyledCard = styled(Card)`
 
   &&& {
     .ant-card-body {
-      display: grid;
-      gap: 20px;
+      padding: 0;
     }
   }
 `;

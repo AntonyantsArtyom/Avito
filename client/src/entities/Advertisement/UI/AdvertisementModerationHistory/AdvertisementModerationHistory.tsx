@@ -1,11 +1,10 @@
-import { Table, Typography } from "antd";
+import { Table } from "antd";
 import type { IAdvertisement } from "../../types/Advertisement";
 import { StyledCard } from "./AdvertisementModerationHistory.styles";
 
 export const AdvertisementModerationHistory = ({ moderationHistory }: Pick<IAdvertisement, "moderationHistory">) => {
   return (
     <StyledCard>
-      <Typography.Title level={4}>История модерации</Typography.Title>
       {moderationHistory.length > 0 && (
         <Table
           pagination={false}

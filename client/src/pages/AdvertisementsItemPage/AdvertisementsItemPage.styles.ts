@@ -1,17 +1,19 @@
 import styled from "styled-components";
 
 export const StyledContainer = styled.div`
-  padding-top: 10px;
+  height: calc(100vh - 20px);
+  margin-top: 10px;
 
   display: grid;
-  grid-template-columns: 348px 1fr;
-  grid-template-rows: 200px auto auto;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 200px 1fr max-content max-content;
   gap: 10px;
 
   grid-template-areas:
     "gallery     moderationHistory"
     "fullInfo    fullInfo         "
-    "buttonsArea buttonsArea      ";
+    "buttonsArea buttonsArea      "
+    "navigation  navigation       ";
 `;
 
 export const StyledButtonsArea = styled.div`
@@ -23,8 +25,7 @@ export const StyledButtonsArea = styled.div`
 `;
 
 export const StyledNavigation = styled.div`
-  grid-column-start: 1;
-  grid-column-end: 4;
+  grid-area: navigation;
 
   display: flex;
   justify-content: space-between;

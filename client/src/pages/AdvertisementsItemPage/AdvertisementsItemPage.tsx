@@ -104,25 +104,25 @@ export const AdvertisementsItemPage = () => {
         >
           Доработка
         </Button>
-
-        <StyledNavigation>
-          <Typography.Text onClick={handleBackToList} style={{ cursor: "pointer" }}>
-            <ArrowLeftOutlined />К списку
-          </Typography.Text>
-
-          <div>
-            <Typography.Text style={{ cursor: "pointer" }}>
-              <LeftOutlined />
-              Предыдущий
-            </Typography.Text>
-            {" | "}
-            <Typography.Text style={{ cursor: "pointer" }}>
-              Следующий
-              <RightOutlined />
-            </Typography.Text>
-          </div>
-        </StyledNavigation>
       </StyledButtonsArea>
+
+      <StyledNavigation>
+        <Typography.Text onClick={handleBackToList} style={{ cursor: "pointer" }}>
+          <ArrowLeftOutlined />К списку
+        </Typography.Text>
+
+        <div>
+          <Typography.Text style={{ cursor: "pointer" }}>
+            <LeftOutlined />
+            Предыдущий
+          </Typography.Text>
+          {" | "}
+          <Typography.Text style={{ cursor: "pointer" }}>
+            Следующий
+            <RightOutlined />
+          </Typography.Text>
+        </div>
+      </StyledNavigation>
 
       <Modal title="Отклонить объявление" open={rejectModalVisible} onCancel={() => setRejectModalVisible(false)} footer={null}>
         <Form form={form} onFinish={handleReject} layout="vertical">

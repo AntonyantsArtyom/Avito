@@ -5,7 +5,6 @@ import { StyledCard, StyledName, StyledRegisteredAt, StyledSellerInfo, StyledTot
 export const AdvertisementFullInfo = ({ characteristics, seller }: Pick<IAdvertisement, "characteristics" | "seller">) => {
   return (
     <StyledCard>
-      <Typography.Title level={3}>Полное описание</Typography.Title>
       <div>
         <Typography.Title level={4}>Характеристики</Typography.Title>
         <Table
