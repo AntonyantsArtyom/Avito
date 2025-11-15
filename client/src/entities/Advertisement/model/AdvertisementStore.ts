@@ -31,6 +31,7 @@ interface IAdvertisementStore {
   requestChangesAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;
 
   getNextAdvertisementId: () => Promise<number | undefined>;
+  getPrevAdvertisementId: () => Promise<number | undefined>;
 }
 
 export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => ({
@@ -168,9 +169,6 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
 
   getNextAdvertisementId: async () => {
     const { advertisement, advertisements, currentPage, goToPage, totalPages } = get();
-
-    if (!advertisements.length) return undefined;
-
     const currentIndex = advertisements.findIndex((advertisements) => advertisements.id === advertisement?.id);
 
     if (currentIndex < advertisements.length - 1) {
@@ -182,7 +180,21 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
       const { advertisements: newAds } = get();
       return newAds[0]?.id;
     }
+  },
 
-    return undefined;
+  getPrevAdvertisementId: async () => {
+    const { advertisement, advertisements, currentPage, goToPage } = get();
+
+    const currentIndex = advertisements.findIndex((ad) => ad.id === advertisement?.id);
+
+    if (currentIndex > 0) {
+      return advertisements[currentIndex - 1]?.id;
+    }
+
+    if (currentIndex === 0 && currentPage > 1) {
+      await goToPage(currentPage - 1);
+      const { advertisements: newAds } = get();
+      return newAds[newAds.length - 1]?.id;
+    }
   },
 }));

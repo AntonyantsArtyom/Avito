@@ -17,7 +17,7 @@ export const AdvertisementsItemPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const { approveAdvertisement, rejectAdvertisement, requestChangesAdvertisement, getNextAdvertisementId } = useAdvertisementStore();
+  const { approveAdvertisement, rejectAdvertisement, requestChangesAdvertisement, getNextAdvertisementId, getPrevAdvertisementId } = useAdvertisementStore();
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -74,7 +74,10 @@ export const AdvertisementsItemPage = () => {
     navigate(`/item/${nextId}`);
   };
 
-  const handlePrev = () => {};
+  const handlePrev = async () => {
+    const prevId = await getPrevAdvertisementId();
+    navigate(`/item/${prevId}`);
+  };
 
   if (!advertisement) return null;
 
