@@ -37,7 +37,7 @@ interface IAdvertisementStore {
 export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => ({
   advertisements: [],
   advertisement: null,
-  limit: 15,
+  limit: 10,
   currentPage: 1,
   totalPages: 1,
   totalItems: 0,
