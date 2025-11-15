@@ -20,7 +20,7 @@ interface IAdvertisementStore {
 
   fetchAdvertisements: (page?: number) => Promise<void>;
   fetchAdvertisement: (id: number) => Promise<void>;
-  goToPage: (page: number) => void;
+  goToPage: (page: number) => Promise<void>;
 
   setFilters: (filters: Partial<IAdvertisementStore["filters"]>) => void;
   clearFilters: () => void;
@@ -29,6 +29,8 @@ interface IAdvertisementStore {
   approveAdvertisement: (id: number) => Promise<void>;
   rejectAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;
   requestChangesAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;
+
+  getNextAdvertisementId: () => Promise<number | undefined>;
 }
 
 export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => ({
@@ -91,9 +93,9 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     set({ advertisement: data });
   },
 
-  goToPage: (page) => {
+  goToPage: async (page) => {
     const state = get();
-    state.fetchAdvertisements(page);
+    await state.fetchAdvertisements(page);
   },
 
   setFilters: (newFilters) => {
@@ -156,11 +158,31 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     const data = await response.json();
 
     set((state) => ({
-      advertisements: state.advertisements.map((ad) => (ad.id === id ? data.ad : ad)),
+      advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? data.ad : advertisements)),
     }));
 
     if (get().advertisement?.id === id) {
       get().fetchAdvertisement(id);
     }
+  },
+
+  getNextAdvertisementId: async () => {
+    const { advertisement, advertisements, currentPage, goToPage, totalPages } = get();
+
+    if (!advertisements.length) return undefined;
+
+    const currentIndex = advertisements.findIndex((advertisements) => advertisements.id === advertisement?.id);
+
+    if (currentIndex < advertisements.length - 1) {
+      return advertisements[currentIndex + 1]?.id;
+    }
+
+    if (currentPage < totalPages) {
+      await goToPage(currentPage + 1);
+      const { advertisements: newAds } = get();
+      return newAds[0]?.id;
+    }
+
+    return undefined;
   },
 }));

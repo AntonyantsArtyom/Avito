@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { IAdvertisement } from "../../entities/Advertisement/types/Advertisement";
 import { AdvertisementFullInfo } from "../../entities/Advertisement/UI/AdvertisementFullInfo/AdvertisementFullInfo";
 import { AdvertisementModerationHistory } from "../../entities/Advertisement/UI/AdvertisementModerationHistory/AdvertisementModerationHistory";
 import { StyledButtonsArea, StyledContainer, StyledNavigation } from "./AdvertisementsItemPage.styles";
@@ -18,7 +17,7 @@ export const AdvertisementsItemPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const { approveAdvertisement, rejectAdvertisement, requestChangesAdvertisement } = useAdvertisementStore();
+  const { approveAdvertisement, rejectAdvertisement, requestChangesAdvertisement, getNextAdvertisementId } = useAdvertisementStore();
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -27,7 +26,7 @@ export const AdvertisementsItemPage = () => {
     if (id) {
       fetchAdvertisement(+id);
     }
-  }, []);
+  }, [window.location.href]);
 
   const handleApprove = async () => {
     if (!advertisement) return;
@@ -70,6 +69,13 @@ export const AdvertisementsItemPage = () => {
     navigate("/list");
   };
 
+  const handleNext = async () => {
+    const nextId = await getNextAdvertisementId();
+    navigate(`/item/${nextId}`);
+  };
+
+  const handlePrev = () => {};
+
   if (!advertisement) return null;
 
   return (
@@ -103,12 +109,12 @@ export const AdvertisementsItemPage = () => {
         </Typography.Text>
 
         <div>
-          <Typography.Text style={{ cursor: "pointer" }}>
+          <Typography.Text style={{ cursor: "pointer" }} onClick={handlePrev}>
             <LeftOutlined />
             Предыдущий
           </Typography.Text>
           {" | "}
-          <Typography.Text style={{ cursor: "pointer" }}>
+          <Typography.Text style={{ cursor: "pointer" }} onClick={handleNext}>
             Следующий
             <RightOutlined />
           </Typography.Text>
