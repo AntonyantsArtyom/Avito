@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AdvertisementFullInfo } from "../../entities/Advertisement/UI/AdvertisementFullInfo/AdvertisementFullInfo";
 import { AdvertisementModerationHistory } from "../../entities/Advertisement/UI/AdvertisementModerationHistory/AdvertisementModerationHistory";
@@ -14,13 +14,25 @@ import { ToListNavButton } from "../../shared/UI/ToListNavButton/ToListNavButton
 
 export const AdvertisementsItemPage = () => {
   const { advertisement, fetchAdvertisement } = useAdvertisementStore();
+  const abortControllerRef = useRef<AbortController | null>(null);
   const navigate = useNavigate();
 
   const { getNextAdvertisementId, getPrevAdvertisementId } = useAdvertisementStore();
 
   useEffect(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
     const url = new URL(window.location.href);
-    fetchAdvertisement(+url.pathname.split("/").pop()!);
+    fetchAdvertisement(+url.pathname.split("/").pop()!, abortControllerRef.current.signal);
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
   }, [window.location.href]);
 
   const handleNext = async () => {
