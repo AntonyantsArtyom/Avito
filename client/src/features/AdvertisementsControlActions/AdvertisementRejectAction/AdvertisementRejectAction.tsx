@@ -1,4 +1,4 @@
-import { Button, Form, message, Modal, Select, Input } from "antd";
+import { Button, Form, Modal, Select, Input } from "antd";
 import { useAdvertisementStore } from "../../../entities/Advertisement/model/AdvertisementStore";
 import type { IAdvertisement } from "../../../entities/Advertisement/types/Advertisement";
 import { CloseOutlined } from "@ant-design/icons";
@@ -8,17 +8,30 @@ const { Option } = Select;
 export const AdvertisementsRejectAction = ({ advertisement }: { advertisement: IAdvertisement }) => {
   const { rejectAdvertisement } = useAdvertisementStore();
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
+  const [showCustomReason, setShowCustomReason] = useState(false);
   const [form] = Form.useForm();
 
-  const handleReject = async (values: { reason: string; comment?: string }) => {
-    try {
-      await rejectAdvertisement(advertisement.id, values.reason, values.comment);
-      setRejectModalVisible(false);
-      form.resetFields();
-      message.success("Объявление отклонено");
-    } catch (error) {
-      message.error("Ошибка при отклонении объявления");
+  const handleReject = async (values: { reason: string; comment?: string; customReason?: string }) => {
+    let finalReason = values.reason;
+
+    if (values.reason === "Другое" && values.customReason) {
+      finalReason = `Другое: ${values.customReason}`;
     }
+
+    await rejectAdvertisement(advertisement.id, finalReason, values.comment);
+    setRejectModalVisible(false);
+    setShowCustomReason(false);
+    form.resetFields();
+  };
+
+  const handleReasonChange = (value: string) => {
+    setShowCustomReason(value === "Другое");
+  };
+
+  const handleModalClose = () => {
+    setRejectModalVisible(false);
+    setShowCustomReason(false);
+    form.resetFields();
   };
 
   return (
@@ -26,10 +39,10 @@ export const AdvertisementsRejectAction = ({ advertisement }: { advertisement: I
       <Button type="primary" size="large" icon={<CloseOutlined />} onClick={() => setRejectModalVisible(true)} disabled={advertisement.status !== "pending"}>
         Отклонить
       </Button>
-      <Modal title="Отклонить объявление" open={rejectModalVisible} onCancel={() => setRejectModalVisible(false)} footer={null}>
+      <Modal title="Отклонить объявление" open={rejectModalVisible} onCancel={handleModalClose} footer={null}>
         <Form form={form} onFinish={handleReject} layout="vertical">
           <Form.Item name="reason" label="Причина отклонения" rules={[{ required: true, message: "Выберите причину" }]}>
-            <Select placeholder="Выберите причину">
+            <Select placeholder="Выберите причину" onChange={handleReasonChange}>
               <Option value="Запрещенный товар">Запрещенный товар</Option>
               <Option value="Неверная категория">Неверная категория</Option>
               <Option value="Некорректное описание">Некорректное описание</Option>
@@ -39,6 +52,12 @@ export const AdvertisementsRejectAction = ({ advertisement }: { advertisement: I
             </Select>
           </Form.Item>
 
+          {showCustomReason && (
+            <Form.Item name="customReason" label="Укажите причину" rules={[{ required: true, message: "Введите причину" }]}>
+              <Input placeholder="Опишите причину отклонения" />
+            </Form.Item>
+          )}
+
           <Form.Item name="comment" label="Комментарий">
             <Input.TextArea placeholder="Дополнительный комментарий" rows={4} />
           </Form.Item>
@@ -47,7 +66,7 @@ export const AdvertisementsRejectAction = ({ advertisement }: { advertisement: I
             <Button type="primary" htmlType="submit" danger>
               Отклонить
             </Button>
-            <Button onClick={() => setRejectModalVisible(false)} style={{ marginLeft: 8 }}>
+            <Button onClick={handleModalClose} style={{ marginLeft: 8 }}>
               Отмена
             </Button>
           </Form.Item>

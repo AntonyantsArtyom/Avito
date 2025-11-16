@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Button } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 import { useAdvertisementStore } from "../../../entities/Advertisement/model/AdvertisementStore";
 import type { IAdvertisement } from "../../../entities/Advertisement/types/Advertisement";
@@ -7,12 +7,7 @@ export const AdvertisementsApproveAction = ({ advertisement }: { advertisement: 
   const { approveAdvertisement } = useAdvertisementStore();
 
   const handleApprove = async () => {
-    try {
-      await approveAdvertisement(advertisement.id);
-      message.success("Объявление одобрено");
-    } catch (error) {
-      message.error("Ошибка при одобрении объявления");
-    }
+    await approveAdvertisement(advertisement.id);
   };
 
   return (
