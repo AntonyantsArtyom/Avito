@@ -4,8 +4,9 @@ import { MetricsCards } from "../../entities/Statistics/UI/MetricsCards/MetricsC
 import { ActivityChart } from "../../entities/Statistics/UI/ActivityChart/ActivityChart";
 import { DecisionsChart } from "../../entities/Statistics/UI/DecisionsChart/DecisionsChart";
 import { CategoriesChart } from "../../entities/Statistics/UI/CategoriesChart/CategoriesChart";
-import { StyledAsideContainer, StyledContainer, StyledItemsContainer } from "./StatisticsPage.styles";
+import { StyledAsideContainer, StyledContainer, StyledItemsContainer, StyledNavContainer } from "./StatisticsPage.styles";
 import { ToListNavButton } from "../../shared/UI/ToListNavButton/ToListNavButton";
+import { StatisticsFilter } from "../../features/StatisticsFilter/StatisticsFilter";
 
 export const StatisticsPage = () => {
   const { summaryStats, activityChart, decisionsChart, categoriesChart, fetchAllStatistics } = useStatisticsStore();
@@ -19,8 +20,11 @@ export const StatisticsPage = () => {
   return (
     <StyledContainer>
       <StyledAsideContainer>
+        <StatisticsFilter />
         <MetricsCards summaryStats={summaryStats} />
-        <ToListNavButton />
+        <StyledNavContainer>
+          <ToListNavButton />
+        </StyledNavContainer>
       </StyledAsideContainer>
       <StyledItemsContainer>
         <div />

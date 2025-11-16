@@ -28,6 +28,10 @@ export const StyledAsideContainer = styled.div`
   margin: 10px 0;
 
   display: flex;
+  gap: 10px;
   flex-direction: column;
-  justify-content: space-between;
+`;
+
+export const StyledNavContainer = styled.div`
+  margin-top: auto;
 `;

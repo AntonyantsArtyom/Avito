@@ -26,6 +26,10 @@ export const useStatisticsStore = create<IStatisticsStore>((set, get) => ({
     });
   },
 
+  applyFilters: async () => {
+    await get().fetchAllStatistics();
+  },
+
   fetchSummaryStats: async () => {
     const { filters } = get();
     const params = new URLSearchParams();

@@ -42,4 +42,5 @@ export interface IStatisticsStore {
   fetchDecisionsChart: () => Promise<void>;
   fetchCategoriesChart: () => Promise<void>;
   fetchAllStatistics: () => Promise<void>;
+  applyFilters: () => Promise<void>;
 }
