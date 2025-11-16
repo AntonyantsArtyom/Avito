@@ -1,6 +1,7 @@
 import { Table } from "antd";
 import type { IAdvertisement } from "../../types/Advertisement";
 import { StyledCard } from "./AdvertisementModerationHistory.styles";
+import dayjs from "dayjs";
 
 export const AdvertisementModerationHistory = ({ moderationHistory }: Pick<IAdvertisement, "moderationHistory">) => {
   return (
@@ -18,6 +19,9 @@ export const AdvertisementModerationHistory = ({ moderationHistory }: Pick<IAdve
               title: "Дата",
               dataIndex: "timestamp",
               key: "timestamp",
+              render: (value: string) => {
+                return dayjs(value).format("YYYY.MM.DD HH:mm");
+              },
             },
             {
               title: "Действие",

@@ -2,6 +2,7 @@ import { Statistic } from "antd";
 import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, FileTextOutlined } from "@ant-design/icons";
 import type { SummaryStats } from "../../types/Statistics";
 import { StyledCard, StyledContainer } from "./MetricsCards.styles";
+import { formatSecondsToMinutes } from "../../../../shared/utils/formatSecundsToMinuts";
 
 interface MetricsCardsProps {
   summaryStats: SummaryStats;
@@ -15,15 +16,27 @@ export const MetricsCards = ({ summaryStats }: MetricsCardsProps) => {
       </StyledCard>
 
       <StyledCard>
-        <Statistic title="Одобрено" value={summaryStats.approvedPercentage} suffix="%" prefix={<CheckCircleOutlined />} valueStyle={{ color: "#3f8600" }} />
+        <Statistic
+          title="Одобрено"
+          value={summaryStats.approvedPercentage.toFixed(2)}
+          suffix="%"
+          prefix={<CheckCircleOutlined />}
+          valueStyle={{ color: "#3f8600" }}
+        />
       </StyledCard>
 
       <StyledCard>
-        <Statistic title="Отклонено" value={summaryStats.rejectedPercentage} suffix="%" prefix={<CloseCircleOutlined />} valueStyle={{ color: "#cf1322" }} />
+        <Statistic
+          title="Отклонено"
+          value={summaryStats.rejectedPercentage.toFixed(2)}
+          suffix="%"
+          prefix={<CloseCircleOutlined />}
+          valueStyle={{ color: "#cf1322" }}
+        />
       </StyledCard>
 
       <StyledCard>
-        <Statistic title="Среднее время" value={summaryStats.averageReviewTime} suffix="сек" prefix={<ClockCircleOutlined />} />
+        <Statistic title="Среднее время" value={formatSecondsToMinutes(summaryStats.averageReviewTime)} prefix={<ClockCircleOutlined />} />
       </StyledCard>
     </StyledContainer>
   );

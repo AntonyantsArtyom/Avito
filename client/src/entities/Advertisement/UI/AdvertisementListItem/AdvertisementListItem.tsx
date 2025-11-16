@@ -13,6 +13,7 @@ import { ArrowRightOutlined } from "@ant-design/icons";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tag } from "antd";
+import dayjs from "dayjs";
 
 export const AdvertisementListItem = ({
   title,
@@ -41,7 +42,7 @@ export const AdvertisementListItem = ({
         <StyledTitle>{title}</StyledTitle>
         <StyledPrice>{price}₽</StyledPrice>
         <StyledCategoryAndDate>
-          {category} ● {createdAt}
+          {category} ● {dayjs(createdAt).format("YYYY.MM.DD HH:mm")}
         </StyledCategoryAndDate>
         <StyledButton type="primary" onClick={handleClick}>
           Открыть
