@@ -49,21 +49,19 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
       params.append("search", filters.search);
     }
 
-    const response = await fetch(`http://localhost:3001/api/v1/ads?${params.toString()}`);
-    const data = await response.json();
+    const response = await axios.get(`http://localhost:3001/api/v1/ads?${params.toString()}`);
 
     set({
-      advertisements: data.ads,
-      totalPages: data.pagination.totalPages,
-      currentPage: data.pagination.currentPage,
-      totalItems: data.pagination.totalItems,
+      advertisements: response.data.ads,
+      totalPages: response.data.pagination.totalPages,
+      currentPage: response.data.pagination.currentPage,
+      totalItems: response.data.pagination.totalItems,
     });
   },
 
   fetchAdvertisement: async (id: number) => {
-    const response = await fetch(`http://localhost:3001/api/v1/ads/${id}`);
-    const data = await response.json();
-    set({ advertisement: data });
+    const response = await axios.get(`http://localhost:3001/api/v1/ads/${id}`);
+    set({ advertisement: response.data });
   },
 
   goToPage: async (page) => {
