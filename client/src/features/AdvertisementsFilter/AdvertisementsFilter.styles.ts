@@ -2,7 +2,7 @@ import { Card, Input } from "antd";
 import styled from "styled-components";
 
 export const StyledCard = styled(Card)`
-  margin: 10px 0;
+  margin-top: 10px;
   height: fit-content;
 
   &&& {

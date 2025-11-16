@@ -39,3 +39,10 @@ export const StyledPaginationCard = styled(Card)`
     }
   }
 `;
+
+export const StyledAsideContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+`;

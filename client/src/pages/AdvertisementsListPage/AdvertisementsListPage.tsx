@@ -1,20 +1,33 @@
-import { useEffect } from "react";
-import { Pagination } from "antd";
+import { useCallback, useEffect } from "react";
+import { Button, Pagination } from "antd";
 import { AdvertisementListItem } from "../../entities/Advertisement/UI/AdvertisementListItem/AdvertisementListItem";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
 import { AdvertisementsFilter } from "../../features/AdvertisementsFilter/AdvertisementsFilter";
-import { StyledContainer, StyledItemsContainer, StyledPaginationCard } from "./AdvertisementsListPage.styles";
+import { StyledAsideContainer, StyledContainer, StyledItemsContainer, StyledPaginationCard } from "./AdvertisementsListPage.styles";
+import { PieChartOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 export const AdvertisementsListPage = () => {
   const { advertisements, fetchAdvertisements, currentPage, totalItems, limit, goToPage } = useAdvertisementStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAdvertisements();
   }, []);
 
+  const handleStatsClick = () => {
+    navigate(`/stats`);
+  };
+
   return (
     <StyledContainer>
-      <AdvertisementsFilter />
+      <StyledAsideContainer>
+        <AdvertisementsFilter />
+        <Button type="primary" onClick={handleStatsClick}>
+          Моя статистика
+          <PieChartOutlined />
+        </Button>
+      </StyledAsideContainer>
       <StyledItemsContainer>
         <div />
         {advertisements.map((advertisement) => (
