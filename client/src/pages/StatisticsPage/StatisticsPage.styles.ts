@@ -23,3 +23,11 @@ export const StyledItemsContainer = styled.div`
     display: none;
   }
 `;
+
+export const StyledAsideContainer = styled.div`
+  margin: 10px 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;

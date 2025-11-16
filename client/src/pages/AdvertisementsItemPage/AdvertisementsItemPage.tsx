@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { AdvertisementFullInfo } from "../../entities/Advertisement/UI/AdvertisementFullInfo/AdvertisementFullInfo";
 import { AdvertisementModerationHistory } from "../../entities/Advertisement/UI/AdvertisementModerationHistory/AdvertisementModerationHistory";
 import { StyledButtonsArea, StyledContainer, StyledNavigation } from "./AdvertisementsItemPage.styles";
-import { ArrowLeftOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
 import { AdvertisementGallery } from "../../entities/Advertisement/UI/AdvertisementGallery/AdvertisementGallery";
 import { AdvertisementsApproveAction } from "../../features/AdvertisementsControlActions/AdvertisementsApproveAction/AdvertisementsApproveAction";
 import { AdvertisementsRejectAction } from "../../features/AdvertisementsControlActions/AdvertisementRejectAction/AdvertisementRejectAction";
 import { AdvertisementsRequestChangesAction } from "../../features/AdvertisementsControlActions/AdvertisementsRequestChangesAction/AdvertisementsRequestChangesAction";
+import { ToListNavButton } from "../../shared/UI/ToListNavButton/ToListNavButton";
 
 export const AdvertisementsItemPage = () => {
   const { advertisement, fetchAdvertisement } = useAdvertisementStore();
@@ -21,10 +22,6 @@ export const AdvertisementsItemPage = () => {
     const url = new URL(window.location.href);
     fetchAdvertisement(+url.pathname.split("/").pop()!);
   }, [window.location.href]);
-
-  const handleBackToList = () => {
-    navigate("/list");
-  };
 
   const handleNext = async () => {
     const nextId = await getNextAdvertisementId();
@@ -50,9 +47,7 @@ export const AdvertisementsItemPage = () => {
       </StyledButtonsArea>
 
       <StyledNavigation>
-        <Typography.Text onClick={handleBackToList} style={{ cursor: "pointer" }}>
-          <ArrowLeftOutlined />К списку
-        </Typography.Text>
+        <ToListNavButton />
 
         <div>
           <Typography.Text style={{ cursor: "pointer" }} onClick={handlePrev}>

@@ -4,9 +4,6 @@ import styled from "styled-components";
 export const StyledContainer = styled.div`
   display: grid;
   gap: 10px;
-
-  margin-top: 10px;
-  align-self: start;
 `;
 
 export const StyledCard = styled(Card)`
