@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { Button, Pagination } from "antd";
 import { AdvertisementListItem } from "../../entities/Advertisement/UI/AdvertisementListItem/AdvertisementListItem";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
