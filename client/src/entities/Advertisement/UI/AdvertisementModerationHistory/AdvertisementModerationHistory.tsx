@@ -7,45 +7,46 @@ import { formatActionToRU } from "../../../../shared/utils/formatActionsToRU";
 export const AdvertisementModerationHistory = ({ moderationHistory }: Pick<IAdvertisement, "moderationHistory">) => {
   return (
     <StyledCard>
-      {moderationHistory.length > 0 && (
-        <Table
-          pagination={false}
-          columns={[
-            {
-              title: "Модератор",
-              dataIndex: "moderatorName",
-              key: "moderatorName",
+      <Table
+        pagination={false}
+        columns={[
+          {
+            title: "Модератор",
+            dataIndex: "moderatorName",
+            key: "moderatorName",
+          },
+          {
+            title: "Дата",
+            dataIndex: "timestamp",
+            key: "timestamp",
+            render: (value: string) => {
+              return dayjs(value).format("YYYY.MM.DD HH:mm");
             },
-            {
-              title: "Дата",
-              dataIndex: "timestamp",
-              key: "timestamp",
-              render: (value: string) => {
-                return dayjs(value).format("YYYY.MM.DD HH:mm");
-              },
+          },
+          {
+            title: "Действие",
+            dataIndex: "action",
+            key: "action",
+            render: (value: string) => {
+              return formatActionToRU(value);
             },
-            {
-              title: "Действие",
-              dataIndex: "action",
-              key: "action",
-              render: (value: string) => {
-                return formatActionToRU(value);
-              },
-            },
-            {
-              title: "Причина",
-              dataIndex: "reason",
-              key: "reason",
-            },
-            {
-              title: "Комментарий",
-              dataIndex: "comment",
-              key: "comment",
-            },
-          ]}
-          dataSource={moderationHistory}
-        />
-      )}
+          },
+          {
+            title: "Причина",
+            dataIndex: "reason",
+            key: "reason",
+          },
+          {
+            title: "Комментарий",
+            dataIndex: "comment",
+            key: "comment",
+          },
+        ]}
+        dataSource={moderationHistory}
+        locale={{
+          emptyText: "нет элементов истории",
+        }}
+      />
     </StyledCard>
   );
 };
