@@ -26,3 +26,7 @@ export const StyledPriceInput = styled(Input.Group)`
     }
   }
 `;
+
+export const StyledSpace = styled.div`
+  height: 10px;
+`;

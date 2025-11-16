@@ -16,6 +16,8 @@ interface IAdvertisementStore {
     minPrice?: number;
     maxPrice?: number;
     search: string;
+    sortBy: "createdAt" | "price" | "priority";
+    sortOrder: "asc" | "desc";
   };
 
   fetchAdvertisements: (page?: number) => Promise<void>;
@@ -48,6 +50,8 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     minPrice: undefined,
     maxPrice: undefined,
     search: "",
+    sortBy: "createdAt",
+    sortOrder: "desc",
   },
 
   fetchAdvertisements: async (page = 1) => {
@@ -56,6 +60,8 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     const params = new URLSearchParams();
     params.append("page", page.toString());
     params.append("limit", limit.toString());
+    params.append("sortBy", filters.sortBy);
+    params.append("sortOrder", filters.sortOrder);
 
     filters.status.forEach((status) => {
       params.append("status", status);
@@ -113,6 +119,8 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
         minPrice: undefined,
         maxPrice: undefined,
         search: "",
+        sortBy: "createdAt",
+        sortOrder: "desc",
       },
     });
   },

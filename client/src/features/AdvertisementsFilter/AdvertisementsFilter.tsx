@@ -1,6 +1,6 @@
-import { Select, Input, InputNumber, Button } from "antd";
+import { Select, Input, InputNumber, Button, Space, Typography } from "antd";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
-import { StyledCard, StyledPriceInput } from "./AdvertisementsFilter.styles";
+import { StyledCard, StyledPriceInput, StyledSpace } from "./AdvertisementsFilter.styles";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -23,6 +23,14 @@ export const AdvertisementsFilter = () => {
     });
   };
 
+  const handleSortChange = (sortBy: "createdAt" | "price" | "priority") => {
+    setFilters({ sortBy });
+  };
+
+  const handleOrderChange = (sortOrder: "asc" | "desc") => {
+    setFilters({ sortOrder });
+  };
+
   const handleSearch = (value: string) => {
     setFilters({ search: value });
     applyFilters();
@@ -33,8 +41,27 @@ export const AdvertisementsFilter = () => {
     applyFilters();
   };
 
+  const handleApplyFilters = () => {
+    applyFilters();
+  };
+
+  const getOrderText = (sortBy: "createdAt" | "price" | "priority", sortOrder: "asc" | "desc") => {
+    const textStart = "В начале";
+
+    switch (sortBy) {
+      case "createdAt":
+        return `${textStart} ${sortOrder === "desc" ? "новые" : "старые"}`;
+      case "price":
+        return `${textStart} ${sortOrder === "desc" ? "дорогие" : "дешевые"}`;
+      case "priority":
+        return `${textStart} ${sortOrder === "desc" ? "срочные" : "обычные"}`;
+    }
+  };
+
   return (
     <StyledCard>
+      <Typography.Text>Фильтрация</Typography.Text>
+
       <Select mode="multiple" placeholder="Статус" value={filters.status} onChange={handleStatusChange}>
         <Option value="pending">Ожидает модерации</Option>
         <Option value="approved">Одобрено</Option>
@@ -75,10 +102,27 @@ export const AdvertisementsFilter = () => {
         enterButton
       />
 
-      <Button type="primary" onClick={applyFilters}>
-        Применить
-      </Button>
-      <Button onClick={handleClearFilters}>Сбросить</Button>
+      <Typography.Text>Сортировка</Typography.Text>
+
+      <Select value={filters.sortBy} onChange={handleSortChange}>
+        <Option value="createdAt">По дате создания</Option>
+        <Option value="price">По цене</Option>
+        <Option value="priority">По приоритету</Option>
+      </Select>
+
+      <Select value={filters.sortOrder} onChange={handleOrderChange} disabled={!filters.sortBy}>
+        <Option value="asc">{getOrderText(filters.sortBy, "asc")}</Option>
+        <Option value="desc">{getOrderText(filters.sortBy, "desc")}</Option>
+      </Select>
+
+      <StyledSpace />
+
+      <Space>
+        <Button onClick={handleClearFilters}>Сбросить</Button>
+        <Button type="primary" onClick={handleApplyFilters}>
+          Применить
+        </Button>
+      </Space>
     </StyledCard>
   );
 };
