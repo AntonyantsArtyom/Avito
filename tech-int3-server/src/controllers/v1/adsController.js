@@ -6,7 +6,7 @@ const getAds = (req, res) => {
       page = 1,
       limit = 10,
       status,
-      categoryId,
+      category,
       minPrice,
       maxPrice,
       search,
@@ -21,8 +21,8 @@ const getAds = (req, res) => {
       filteredAds = filteredAds.filter(ad => statuses.includes(ad.status));
     }
 
-    if (categoryId) {
-      filteredAds = filteredAds.filter(ad => ad.categoryId === parseInt(categoryId));
+    if (category) {
+      filteredAds = filteredAds.filter(ad => ad.category === category);
     }
 
     if (minPrice) {

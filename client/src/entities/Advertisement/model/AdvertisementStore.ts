@@ -12,7 +12,7 @@ interface IAdvertisementStore {
 
   filters: {
     status: string[];
-    categoryId?: number;
+    category?: number;
     minPrice?: number;
     maxPrice?: number;
     search: string;
@@ -44,7 +44,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
 
   filters: {
     status: [],
-    categoryId: undefined,
+    category: undefined,
     minPrice: undefined,
     maxPrice: undefined,
     search: "",
@@ -61,8 +61,8 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
       params.append("status", status);
     });
 
-    if (filters.categoryId) {
-      params.append("categoryId", filters.categoryId.toString());
+    if (filters.category) {
+      params.append("category", filters.category.toString());
     }
 
     if (filters.minPrice !== undefined) {
@@ -109,7 +109,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     set({
       filters: {
         status: [],
-        categoryId: undefined,
+        category: undefined,
         minPrice: undefined,
         maxPrice: undefined,
         search: "",

@@ -13,7 +13,7 @@ export const AdvertisementsFilter = () => {
   };
 
   const handleCategoryChange = (value: number) => {
-    setFilters({ categoryId: value });
+    setFilters({ category: value });
   };
 
   const handlePriceChange = (min: number | null, max: number | null) => {
@@ -42,12 +42,12 @@ export const AdvertisementsFilter = () => {
         <Option value="draft">Черновик</Option>
       </Select>
 
-      <Select placeholder="Категория" value={filters.categoryId} onChange={handleCategoryChange} allowClear>
-        <Option value={1}>Электроника</Option>
-        <Option value={2}>Одежда</Option>
-        <Option value={3}>Авто</Option>
-        <Option value={4}>Недвижимость</Option>
-        <Option value={5}>Услуги</Option>
+      <Select placeholder="Категория" value={filters.category} onChange={handleCategoryChange} allowClear>
+        {["Электроника", "Недвижимость", "Транспорт", "Работа", "Услуги", "Животные", "Мода", "Детское"].map((category) => (
+          <Option key={category} value={category}>
+            {category}
+          </Option>
+        ))}
       </Select>
 
       <StyledPriceInput>
