@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { IAdvertisementStore } from "../types/Advertisement";
-import axios from "axios";
+import { axiosInstance } from "../../../shared/api/axiosInstance";
 
 export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => ({
   advertisements: [],
@@ -49,7 +49,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
       params.append("search", filters.search);
     }
 
-    const response = await axios.get(`http://localhost:3001/api/v1/ads?${params.toString()}`);
+    const response = await axiosInstance.get(`ads?${params.toString()}`);
 
     set({
       advertisements: response.data.ads,
@@ -60,7 +60,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
   },
 
   fetchAdvertisement: async (id: number) => {
-    const response = await axios.get(`http://localhost:3001/api/v1/ads/${id}`);
+    const response = await axiosInstance.get(`ads/${id}`);
     set({ advertisement: response.data });
   },
 
@@ -95,7 +95,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
   },
 
   approveAdvertisement: async (id: number) => {
-    const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/approve`);
+    const response = await axiosInstance.post(`ads/${id}/approve`);
 
     set((state) => ({
       advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.ad : advertisements)),
@@ -107,7 +107,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
   },
 
   rejectAdvertisement: async (id: number, reason: string, comment: string = "") => {
-    const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/reject`, { reason, comment });
+    const response = await axiosInstance.post(`ads/${id}/reject`, { reason, comment });
 
     set((state) => ({
       advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.ad : advertisements)),
@@ -119,7 +119,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
   },
 
   requestChangesAdvertisement: async (id: number, reason: string, comment: string = "") => {
-    const response = await axios.post(`http://localhost:3001/api/v1/ads/${id}/request-changes`, { reason, comment });
+    const response = await axiosInstance.post(`ads/${id}/request-changes`, { reason, comment });
 
     set((state) => ({
       advertisements: state.advertisements.map((advertisements) => (advertisements.id === id ? response.data.ad : advertisements)),

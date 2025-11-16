@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import axios from "axios";
+import { axiosInstance } from "../../../shared/api/axiosInstance";
 import type { IStatisticsStore } from "../types/Statistics";
+import { create } from "zustand";
 
 export const useStatisticsStore = create<IStatisticsStore>((set, get) => ({
   summaryStats: null,
@@ -35,7 +35,7 @@ export const useStatisticsStore = create<IStatisticsStore>((set, get) => ({
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axios.get(`http://localhost:3001/api/v1/stats/summary?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/summary?${params.toString()}`);
 
     set({
       summaryStats: response.data,
@@ -47,7 +47,7 @@ export const useStatisticsStore = create<IStatisticsStore>((set, get) => ({
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axios.get(`http://localhost:3001/api/v1/stats/chart/activity?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/chart/activity?${params.toString()}`);
 
     set({
       activityChart: response.data,
@@ -59,7 +59,7 @@ export const useStatisticsStore = create<IStatisticsStore>((set, get) => ({
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axios.get(`http://localhost:3001/api/v1/stats/chart/decisions?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/chart/decisions?${params.toString()}`);
 
     set({
       decisionsChart: response.data,
@@ -71,7 +71,7 @@ export const useStatisticsStore = create<IStatisticsStore>((set, get) => ({
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axios.get(`http://localhost:3001/api/v1/stats/chart/categories?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/chart/categories?${params.toString()}`);
 
     set({
       categoriesChart: response.data,
