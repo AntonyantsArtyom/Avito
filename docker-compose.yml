@@ -1,0 +1,22 @@
+
+services:
+  backend:
+    build: 
+      context: ./tech-int3-server   
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3001/api/v1
+    restart: unless-stopped
