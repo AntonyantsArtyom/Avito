@@ -32,3 +32,37 @@ export interface IAdvertisement {
   characteristics: Record<string, string>;
   moderationHistory: IModerationHistory[];
 }
+
+export interface IAdvertisementStore {
+  limit: number;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  advertisements: IAdvertisement[];
+  advertisement: IAdvertisement | null;
+
+  filters: {
+    status: string[];
+    category?: number;
+    minPrice?: number;
+    maxPrice?: number;
+    search: string;
+    sortBy: "createdAt" | "price" | "priority";
+    sortOrder: "asc" | "desc";
+  };
+
+  fetchAdvertisements: (page?: number) => Promise<void>;
+  fetchAdvertisement: (id: number) => Promise<void>;
+  goToPage: (page: number) => Promise<void>;
+
+  setFilters: (filters: Partial<IAdvertisementStore["filters"]>) => void;
+  clearFilters: () => void;
+  applyFilters: () => void;
+
+  approveAdvertisement: (id: number) => Promise<void>;
+  rejectAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;
+  requestChangesAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;
+
+  getNextAdvertisementId: () => Promise<number | undefined>;
+  getPrevAdvertisementId: () => Promise<number | undefined>;
+}
