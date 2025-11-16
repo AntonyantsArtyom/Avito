@@ -51,13 +51,13 @@ export interface IAdvertisementStore {
     sortOrder: "asc" | "desc";
   };
 
-  fetchAdvertisements: (page?: number) => Promise<void>;
-  fetchAdvertisement: (id: number) => Promise<void>;
-  goToPage: (page: number) => Promise<void>;
+  fetchAdvertisements: (page?: number, signal?: AbortSignal) => Promise<void>;
+  fetchAdvertisement: (id: number, signal?: AbortSignal) => Promise<void>;
+  goToPage: (page: number, signal?: AbortSignal) => Promise<void>;
+  applyFilters: (signal?: AbortSignal) => Promise<void>;
 
   setFilters: (filters: Partial<IAdvertisementStore["filters"]>) => void;
   clearFilters: () => void;
-  applyFilters: () => void;
 
   approveAdvertisement: (id: number) => Promise<void>;
   rejectAdvertisement: (id: number, reason: string, comment?: string) => Promise<void>;

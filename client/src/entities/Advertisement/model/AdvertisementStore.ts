@@ -20,7 +20,7 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     sortOrder: "desc",
   },
 
-  fetchAdvertisements: async (page = 1) => {
+  fetchAdvertisements: async (page = 1, signal?: AbortSignal) => {
     const { limit, filters } = get();
 
     const params = new URLSearchParams();
@@ -49,7 +49,9 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
       params.append("search", filters.search);
     }
 
-    const response = await axiosInstance.get(`ads?${params.toString()}`);
+    const response = await axiosInstance.get(`ads?${params.toString()}`, {
+      signal,
+    });
 
     set({
       advertisements: response.data.ads,
@@ -59,14 +61,13 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     });
   },
 
-  fetchAdvertisement: async (id: number) => {
-    const response = await axiosInstance.get(`ads/${id}`);
+  fetchAdvertisement: async (id: number, signal?: AbortSignal) => {
+    const response = await axiosInstance.get(`ads/${id}`, { signal });
     set({ advertisement: response.data });
   },
 
-  goToPage: async (page) => {
-    const state = get();
-    await state.fetchAdvertisements(page);
+  goToPage: async (page, signal?: AbortSignal) => {
+    await get().fetchAdvertisements(page, signal);
   },
 
   setFilters: (newFilters) => {
@@ -89,9 +90,9 @@ export const useAdvertisementStore = create<IAdvertisementStore>((set, get) => (
     });
   },
 
-  applyFilters: () => {
+  applyFilters: async (signal?: AbortSignal) => {
     const state = get();
-    state.fetchAdvertisements(1);
+    await state.fetchAdvertisements(1, signal);
   },
 
   approveAdvertisement: async (id: number) => {

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Select, Input, InputNumber, Button, Space, Typography } from "antd";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
 import { StyledCard, StyledPriceInput, StyledSpace } from "./AdvertisementsFilter.styles";
@@ -7,6 +8,7 @@ const { Option } = Select;
 
 export const AdvertisementsFilter = () => {
   const { filters, setFilters, applyFilters, clearFilters } = useAdvertisementStore();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const handleStatusChange = (values: string[]) => {
     setFilters({ status: values });
@@ -33,16 +35,21 @@ export const AdvertisementsFilter = () => {
 
   const handleSearch = (value: string) => {
     setFilters({ search: value });
-    applyFilters();
+    handleApplyFilters();
   };
 
   const handleClearFilters = () => {
     clearFilters();
-    applyFilters();
+    handleApplyFilters();
   };
 
   const handleApplyFilters = () => {
-    applyFilters();
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
+    applyFilters(abortControllerRef.current.signal);
   };
 
   const getOrderText = (sortBy: "createdAt" | "price" | "priority", sortOrder: "asc" | "desc") => {

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Pagination } from "antd";
 import { AdvertisementListItem } from "../../entities/Advertisement/UI/AdvertisementListItem/AdvertisementListItem";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
@@ -8,15 +8,32 @@ import { PieChartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 export const AdvertisementsListPage = () => {
-  const { advertisements, fetchAdvertisements, currentPage, totalItems, limit, goToPage } = useAdvertisementStore();
+  const { advertisements, currentPage, totalItems, limit, goToPage } = useAdvertisementStore();
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const [pageForView, setPageVorView] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchAdvertisements();
-  }, []);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
+    goToPage(pageForView, abortControllerRef.current.signal);
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [pageForView]);
 
   const handleStatsClick = () => {
     navigate(`/stats`);
+  };
+
+  const handlePageChange = (page: number) => {
+    setPageVorView(page);
   };
 
   return (
@@ -50,7 +67,7 @@ export const AdvertisementsListPage = () => {
             total={totalItems}
             pageSize={limit}
             showSizeChanger={false}
-            onChange={(newPage) => goToPage(newPage)}
+            onChange={handlePageChange}
             showTotal={(total) => `всего ${total} объявлений`}
           />
         </StyledPaginationCard>
