@@ -26,60 +26,60 @@ export const useStatisticsStore = create<IStatisticsStore>((set, get) => ({
     });
   },
 
-  applyFilters: async () => {
-    await get().fetchAllStatistics();
+  applyFilters: async (signal?: AbortSignal) => {
+    await get().fetchAllStatistics(signal);
   },
 
-  fetchSummaryStats: async () => {
+  fetchSummaryStats: async (signal?: AbortSignal) => {
     const { filters } = get();
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axiosInstance.get(`stats/summary?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/summary?${params.toString()}`, { signal });
 
     set({
       summaryStats: response.data,
     });
   },
 
-  fetchActivityChart: async () => {
+  fetchActivityChart: async (signal?: AbortSignal) => {
     const { filters } = get();
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axiosInstance.get(`stats/chart/activity?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/chart/activity?${params.toString()}`, { signal });
 
     set({
       activityChart: response.data,
     });
   },
 
-  fetchDecisionsChart: async () => {
+  fetchDecisionsChart: async (signal?: AbortSignal) => {
     const { filters } = get();
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axiosInstance.get(`stats/chart/decisions?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/chart/decisions?${params.toString()}`, { signal });
 
     set({
       decisionsChart: response.data,
     });
   },
 
-  fetchCategoriesChart: async () => {
+  fetchCategoriesChart: async (signal?: AbortSignal) => {
     const { filters } = get();
     const params = new URLSearchParams();
     params.append("period", filters.period);
 
-    const response = await axiosInstance.get(`stats/chart/categories?${params.toString()}`);
+    const response = await axiosInstance.get(`stats/chart/categories?${params.toString()}`, { signal });
 
     set({
       categoriesChart: response.data,
     });
   },
 
-  fetchAllStatistics: async () => {
+  fetchAllStatistics: async (signal?: AbortSignal) => {
     const { fetchSummaryStats, fetchActivityChart, fetchDecisionsChart, fetchCategoriesChart } = get();
-    await Promise.all([fetchSummaryStats(), fetchActivityChart(), fetchDecisionsChart(), fetchCategoriesChart()]);
+    await Promise.all([fetchSummaryStats(signal), fetchActivityChart(signal), fetchDecisionsChart(signal), fetchCategoriesChart(signal)]);
   },
 }));

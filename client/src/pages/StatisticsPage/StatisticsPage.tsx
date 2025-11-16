@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useStatisticsStore } from "../../entities/Statistics/model/StatisticsStore";
 import { MetricsCards } from "../../entities/Statistics/UI/MetricsCards/MetricsCards";
 import { ActivityChart } from "../../entities/Statistics/UI/ActivityChart/ActivityChart";
@@ -10,9 +10,21 @@ import { StatisticsFilter } from "../../features/StatisticsFilter/StatisticsFilt
 
 export const StatisticsPage = () => {
   const { summaryStats, activityChart, decisionsChart, categoriesChart, fetchAllStatistics } = useStatisticsStore();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
     fetchAllStatistics();
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
   }, []);
 
   if (!summaryStats || !activityChart || !decisionsChart || !categoriesChart) return null;

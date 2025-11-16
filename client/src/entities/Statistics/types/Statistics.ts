@@ -37,10 +37,10 @@ export interface IStatisticsStore {
 
   setFilters: (filters: IStatisticsStore["filters"]) => void;
   clearFilters: () => void;
-  fetchSummaryStats: () => Promise<void>;
-  fetchActivityChart: () => Promise<void>;
-  fetchDecisionsChart: () => Promise<void>;
-  fetchCategoriesChart: () => Promise<void>;
-  fetchAllStatistics: () => Promise<void>;
-  applyFilters: () => Promise<void>;
+  fetchSummaryStats: (signal?: AbortSignal) => Promise<void>;
+  fetchActivityChart: (signal?: AbortSignal) => Promise<void>;
+  fetchDecisionsChart: (signal?: AbortSignal) => Promise<void>;
+  fetchCategoriesChart: (signal?: AbortSignal) => Promise<void>;
+  fetchAllStatistics: (signal?: AbortSignal) => Promise<void>;
+  applyFilters: (signal?: AbortSignal) => Promise<void>;
 }
