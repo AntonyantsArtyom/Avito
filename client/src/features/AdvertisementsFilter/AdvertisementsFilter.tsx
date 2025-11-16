@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Select, Input, InputNumber, Button, Space, Typography } from "antd";
 import { useAdvertisementStore } from "../../entities/Advertisement/model/AdvertisementStore";
 import { StyledCard, StyledPriceInput, StyledSpace } from "./AdvertisementsFilter.styles";
+import { useSearchParams, useLocation } from "react-router-dom";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -9,12 +10,55 @@ const { Option } = Select;
 export const AdvertisementsFilter = () => {
   const { filters, setFilters, applyFilters, clearFilters } = useAdvertisementStore();
   const abortControllerRef = useRef<AbortController | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = Object.fromEntries(searchParams.entries());
+
+    const newFilters = {
+      status: params.status ? params.status.split("+") : [],
+      category: params.category || undefined,
+      minPrice: params.minPrice ? Number(params.minPrice) : undefined,
+      maxPrice: params.maxPrice ? Number(params.maxPrice) : undefined,
+      search: params.search || "",
+      sortBy: (params.sortBy as "createdAt" | "price" | "priority") || "createdAt",
+      sortOrder: (params.sortOrder as "asc" | "desc") || "desc",
+    };
+
+    setFilters(newFilters);
+  }, [location.search]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (filters.status.length > 0) {
+      params.set("status", filters.status.join("+"));
+    }
+    if (filters.category) {
+      params.set("category", filters.category.toString());
+    }
+    if (filters.minPrice !== undefined) {
+      params.set("minPrice", filters.minPrice.toString());
+    }
+    if (filters.maxPrice !== undefined) {
+      params.set("maxPrice", filters.maxPrice.toString());
+    }
+    if (filters.search) {
+      params.set("search", filters.search);
+    }
+
+    params.set("sortBy", filters.sortBy);
+    params.set("sortOrder", filters.sortOrder);
+
+    setSearchParams(params, { replace: true });
+  }, [filters, setSearchParams]);
 
   const handleStatusChange = (values: string[]) => {
     setFilters({ status: values });
   };
 
-  const handleCategoryChange = (value: number) => {
+  const handleCategoryChange = (value: string) => {
     setFilters({ category: value });
   };
 
@@ -40,6 +84,7 @@ export const AdvertisementsFilter = () => {
 
   const handleClearFilters = () => {
     clearFilters();
+    setSearchParams(new URLSearchParams(), { replace: true });
     handleApplyFilters();
   };
 
@@ -69,7 +114,7 @@ export const AdvertisementsFilter = () => {
     <StyledCard>
       <Typography.Text>Фильтрация</Typography.Text>
 
-      <Select mode="multiple" placeholder="Статус" value={filters.status} onChange={handleStatusChange}>
+      <Select mode="multiple" placeholder="Статус" value={filters.status} onChange={handleStatusChange} showSearch={false}>
         <Option value="pending">Ожидает модерации</Option>
         <Option value="approved">Одобрено</Option>
         <Option value="rejected">Отклонено</Option>

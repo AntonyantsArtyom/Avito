@@ -43,7 +43,7 @@ export interface IAdvertisementStore {
 
   filters: {
     status: string[];
-    category?: number;
+    category?: string;
     minPrice?: number;
     maxPrice?: number;
     search: string;
