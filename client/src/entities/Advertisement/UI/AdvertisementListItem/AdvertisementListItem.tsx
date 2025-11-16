@@ -1,3 +1,4 @@
+import { formatStatusToRU } from "../../../../shared/utils/formatStatusToRU";
 import type { IAdvertisement } from "../../types/Advertisement";
 import {
   StyledButton,
@@ -35,7 +36,7 @@ export const AdvertisementListItem = ({
     <StyledCard>
       <StyledTagsContainer>
         {priority === "urgent" && <Tag color="error">{"Срочное"}</Tag>}
-        <Tag>{status}</Tag>
+        <Tag>{formatStatusToRU(status)}</Tag>
       </StyledTagsContainer>
       <StyledImage src={images[0]} alt={title} />
       <StyledTextContainer>

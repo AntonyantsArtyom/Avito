@@ -2,6 +2,7 @@ import { Table } from "antd";
 import type { IAdvertisement } from "../../types/Advertisement";
 import { StyledCard } from "./AdvertisementModerationHistory.styles";
 import dayjs from "dayjs";
+import { formatActionToRU } from "../../../../shared/utils/formatActionsToRU";
 
 export const AdvertisementModerationHistory = ({ moderationHistory }: Pick<IAdvertisement, "moderationHistory">) => {
   return (
@@ -27,6 +28,9 @@ export const AdvertisementModerationHistory = ({ moderationHistory }: Pick<IAdve
               title: "Действие",
               dataIndex: "action",
               key: "action",
+              render: (value: string) => {
+                return formatActionToRU(value);
+              },
             },
             {
               title: "Причина",
